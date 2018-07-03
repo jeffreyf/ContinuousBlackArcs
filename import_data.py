@@ -5,6 +5,7 @@ Import generated data
 
 import json
 from pathlib import Path
+import numpy as np
 
 def get_json_files_in_directory(directory):
     """
@@ -40,3 +41,10 @@ def from_directory(directory):
         data.append(from_json_string(file.read_text()))
         
     return data
+
+def convert_vertices(json_object):
+    vertices = []
+    for vertex in json_object['vertices']:
+        vertices.append([vertex['x'], vertex['y']])
+    
+    return np.array(vertices)
