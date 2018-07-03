@@ -56,3 +56,11 @@ def convert_edges(json_object):
     
     return np.array(vertices)
     
+
+def get_vertices_edges(filepath):
+    """
+    Returns the vertices and edges in the json file found at filepath
+    """
+    json_object = from_json_file(filepath)
+    
+    return convert_vertices(json_object), convert_edges(json_object)
