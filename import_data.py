@@ -48,3 +48,11 @@ def convert_vertices(json_object):
         vertices.append([vertex['x'], vertex['y']])
     
     return np.array(vertices)
+
+def convert_edges(json_object):
+    vertices = []
+    for vertex in json_object['edges']:
+        vertices.append([vertex['v1'], vertex['v2']])
+    
+    return np.array(vertices)
+    
