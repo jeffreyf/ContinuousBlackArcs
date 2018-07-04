@@ -44,10 +44,13 @@ def fitness_function1(xytilde,args):
     
     
 def main():
-    json_object = driver()
+    filename = 'data/map_1.json'
+    json_object = driver(filename)
     plot_map(json_object)
+    original_json = from_json_file(filename)
+    plot_map(original_json, 'C1--')
     
-def driver():
+def driver(filename='data/map_1.json'):
     # Routine to run as test
 
     # total guess at weights
@@ -56,7 +59,6 @@ def driver():
     gamma = 3.0
 
     # Import some data
-    filename = 'data/map_1.json'
     vertices, edges = get_vertices_edges(filename)
 
     # Re-arrange data
@@ -133,13 +135,13 @@ def driver():
     
     return json_object
 
-def plot_map(json_object):
+def plot_map(json_object, plot_arg='C0-o'):
     vertices = convert_vertices(json_object)
     edges = convert_edges(json_object)
     for edge in edges:
         vertex1 = vertices[edge[0]]
         vertex2 = vertices[edge[1]]
-        plt.plot([vertex1[0], vertex2[0]], [vertex1[1], vertex2[1]], 'C0-o')
+        plt.plot([vertex1[0], vertex2[0]], [vertex1[1], vertex2[1]], plot_arg)
 
 
 if __name__ == "__main__":
