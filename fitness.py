@@ -58,7 +58,7 @@ def main():
 
     # Evaluate fitness function
     test = fitness_function1(xy,x,y,edges,theta,alpha,beta,gamma)
-    print 'fitness = ', test
+    print('fitness = ', test)
 
 
 
