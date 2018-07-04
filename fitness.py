@@ -58,13 +58,13 @@ def fitness_function1(xytilde,args):
     
 def main():
     do_rotation = False
-    filename = 'data/map_2.json'
+    filename = 'data/map_3.json'
     vertices, edges = get_vertices_edges(filename)
     # Grab the histogram data
     if do_rotation:
         h = plot_thetas(vertices, edges)
         plt.show()
-        top_indices = flip(argsort(h[0]), axis=0)[:1]
+        top_indices = flip(argsort(h[0]), axis=0)[:5]
         avg = average(h[1][top_indices], weights=h[0][top_indices])
         theta = pi / 2 - avg
         theta = -theta
@@ -74,7 +74,7 @@ def main():
         rotated = matmul(rotation, vertices.transpose())
         vertices = array(rotated.transpose())
         
-    json_object = driver(filename)
+    json_object = driver(filename, vertices=vertices, edges=edges)
     plot_map(json_object)
     plot_vertices_edges(vertices, edges, 'C1--')
     plt.show()
