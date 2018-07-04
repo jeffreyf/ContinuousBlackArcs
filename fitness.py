@@ -55,7 +55,8 @@ def main():
     # Re-arrange data
     x = vertices[:, 0]
     y = vertices[:, 1]
-
+    n_v = size(x)
+    
     n_e = shape(edges)[0]
     theta = zeros(n_e)
     for j in range(n_e):
@@ -72,7 +73,11 @@ def main():
 
     res = opt.minimize(fitness_function1,xy,args=[x,y,edges,theta,alpha,beta,gamma],options={'disp':True})
 
-    print(res.x)
+    xtilde = res.x[0:n_v]
+    ytilde = res.x[n_v:]
 
+    print(xtilde)
+    print(ytilde)
+    
 if __name__ == "__main__":
     main()
