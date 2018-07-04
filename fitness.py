@@ -41,8 +41,6 @@ def fitness_function1(xytilde,args):
     return fitness
     
     
-    
-    
 def main():
     json_object = driver()
     plot_map(json_object)
@@ -51,9 +49,9 @@ def driver():
     # Routine to run as test
 
     # total guess at weights
-    alpha = 10.0
+    alpha = 1.0e-6
     beta = 2.0
-    gamma = 3.0
+    gamma = 1.0
 
     # Import some data
     filename = 'data/map_1.json'
@@ -82,7 +80,7 @@ def driver():
     # Try Differential Evolution
     bounds = zeros((size(xy),2))
     for i in range(size(xy)):
-        bounds[i] = (xy[i]-10,xy[i]+10)
+        bounds[i] = (xy[i]-50,xy[i]+50)
     res = opt.differential_evolution(fitness_function1,bounds,args=[[x,y,edges,theta,alpha,beta,gamma]], disp=True)
     
     
@@ -112,9 +110,9 @@ def driver():
     print(xtilde-x)
     print(ytilde-y)
 
-    print('Original angles, followed by new angles:')
-    print(theta)
-    print(thetatilde)
+    print('Original angles as multiples of pi/8, followed by new angles:')
+    print(theta*8/pi)
+    print(thetatilde*8/pi)
 
     print('fitness functional term1 = ',fitness1,', term2 = ',fitness2,', term3 = ',fitness3)
 
@@ -130,7 +128,7 @@ def driver():
     
     #print(json_object)
     save_json_file(json_object, "optimized.json")
-    
+
     return json_object
 
 def plot_map(json_object):
@@ -140,6 +138,8 @@ def plot_map(json_object):
         vertex1 = vertices[edge[0]]
         vertex2 = vertices[edge[1]]
         plt.plot([vertex1[0], vertex2[0]], [vertex1[1], vertex2[1]], 'C0-o')
+    plt.show()
+
 
 
 if __name__ == "__main__":
