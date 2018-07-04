@@ -1,7 +1,8 @@
 from numpy import *
 from math import *
-from import_data import get_vertices_edges, from_json_file, save_json_file
+from import_data import get_vertices_edges, from_json_file, save_json_file, convert_edges, convert_vertices
 import scipy.optimize as opt
+import matplotlib.pyplot as plt
 
 def fitness_function1(xytilde,args):
     # Evaluate fitness function
@@ -41,12 +42,16 @@ def fitness_function1(xytilde,args):
     
     
 def main():
+    json_object = driver()
+    plot_map(json_object)
+    
+def driver():
     # Routine to run as test
 
     # total guess at weights
-    alpha = 10.0
-    beta = 2.0
-    gamma = 3.0
+    alpha = 00.0
+    beta = 10.0
+    gamma = 300.0
 
     # Import some data
     filename = 'data/map_1.json'
@@ -70,7 +75,7 @@ def main():
     print('Original function value is ',fitness_function1(xy,[x,y,edges,theta,alpha,beta,gamma]))
     # Optimize call
     res = opt.minimize(fitness_function1,xy,args=[x,y,edges,theta,alpha,beta,gamma], method='Powell', options={'disp':True})
-
+    
     # Extract solution
     xtilde = res.x[0:n_v]
     ytilde = res.x[n_v:]
@@ -115,7 +120,16 @@ def main():
     
     #print(json_object)
     save_json_file(json_object, "optimized.json")
+    
+    return json_object
 
+def plot_map(json_object):
+    vertices = convert_vertices(json_object)
+    edges = convert_edges(json_object)
+    for edge in edges:
+        vertex1 = vertices[edge[0]]
+        vertex2 = vertices[edge[1]]
+        plt.plot([vertex1[0], vertex2[0]], [vertex1[1], vertex2[1]], 'C0-o')
 
 if __name__ == "__main__":
     main()
