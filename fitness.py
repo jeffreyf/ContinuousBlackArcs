@@ -1,7 +1,7 @@
 from numpy import *
 from math import *
 from import_data import get_vertices_edges
-from scipy import *
+import scipy.optimize as opt
 
 def fitness_function1(xytilde,args):
     # Evaluate fitness function
@@ -47,15 +47,15 @@ def main():
     alpha = 1.0
     beta = 2.0
     gamma = 3.0
-    
+
     # Import some data
     filename = 'data/map_1.json'
     vertices, edges = get_vertices_edges(filename)
-    
-    # Re-rrange data
+
+    # Re-arrange data
     x = vertices[:, 0]
     y = vertices[:, 1]
-    
+
     n_e = shape(edges)[0]
     theta = zeros(n_e)
     for j in range(n_e):
@@ -65,14 +65,14 @@ def main():
 
     # Create test array as initial data
     xy = concatenate((x,y))
-    # Move something
-    #xy[3] = 3
 
     # Evaluate fitness function
     test = fitness_function1(xy,[x,y,edges,theta,alpha,beta,gamma])
     print('fitness = ', test)
 
-    #optimize.minimize
+    res = opt.minimize(fitness_function1,xy,args=[x,y,edges,theta,alpha,beta,gamma],options={'disp':True})
+
+    print(res.x)
 
 if __name__ == "__main__":
     main()
