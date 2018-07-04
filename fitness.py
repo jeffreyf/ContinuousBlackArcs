@@ -1,8 +1,17 @@
 from numpy import *
 from math import *
+from scipy import *
 
-def fitness_function1(xytilde,x,y,edges,theta,alpha,beta,gamma):
+def fitness_function1(xytilde,args):
     # Evaluate fitness function
+
+    x = args[0]
+    y = args[1]
+    edges = args[2]
+    theta = args[3]
+    alpha = args[4]
+    beta = args[5]
+    gamma = args[6]
 
     # Extract sizes and sub-arrays
     n_v = size(x)
@@ -57,10 +66,10 @@ def main():
     xy[3] = 3
 
     # Evaluate fitness function
-    test = fitness_function1(xy,x,y,edges,theta,alpha,beta,gamma)
+    test = fitness_function1(xy,[x,y,edges,theta,alpha,beta,gamma])
     print('fitness = ', test)
 
-
+    #optimize.minimize
 
 if __name__ == "__main__":
     main()
