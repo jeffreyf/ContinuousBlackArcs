@@ -44,7 +44,7 @@ def main():
     # Routine to run as test
 
     # total guess at weights
-    alpha = 1.0
+    alpha = 10.0
     beta = 2.0
     gamma = 3.0
 
@@ -67,18 +67,43 @@ def main():
     # Create test array as initial data
     xy = concatenate((x,y))
 
-    # Evaluate fitness function
-    test = fitness_function1(xy,[x,y,edges,theta,alpha,beta,gamma])
-    print('fitness = ', test)
+    print('Original function value is ',fitness_function1(xy,[x,y,edges,theta,alpha,beta,gamma]))
+    # Optimize call
+    res = opt.minimize(fitness_function1,xy,args=[x,y,edges,theta,alpha,beta,gamma], method='Powell', options={'disp':True})
 
-    res = opt.minimize(fitness_function1,xy,args=[x,y,edges,theta,alpha,beta,gamma],options={'disp':True})
-
+    # Extract solution
     xtilde = res.x[0:n_v]
     ytilde = res.x[n_v:]
 
-    print(xtilde)
-    print(ytilde)
-    
+
+    # Postprocess and compute new theta's
+    thetatilde = zeros(n_e)
+    for j in range(n_e):
+        node1 = edges[j,0]
+        node2 = edges[j,1]
+        thetatilde[j] = arctan2(xtilde[node2]-xtilde[node1],ytilde[node2]-ytilde[node1])
+
+    # Compute terms of fitness functional
+    fitness1 = 0.0
+    for i in range(n_v):
+        fitness1 += alpha*((xtilde[i]-x[i])**2 + (ytilde[i]-y[i])**2)
+    fitness2 = 0.0
+    fitness3 = 0.0
+    for j in range(n_e):
+        fitness2 += beta*(thetatilde[j]-theta[j])**2
+        fitness3 += gamma*(sin(8*thetatilde[j]))**2
+        
+    print('Movement of nodes:')
+    print(xtilde-x)
+    print(ytilde-y)
+
+    print('Original angles, followed by new angles:')
+    print(theta)
+    print(thetatilde)
+
+    print('fitness functional term1 = ',fitness1,', term2 = ',fitness2,', term3 = ',fitness3)
+
+
     # Put it into a dictionary
     vertices = []
     for xtilde, ytilde in zip(xtilde, ytilde):
@@ -88,8 +113,9 @@ def main():
     json_object = from_json_file(filename)
     json_object['vertices'] = vertices
     
-    print(json_object)
+    #print(json_object)
     save_json_file(json_object, "optimized.json")
-    
+
+
 if __name__ == "__main__":
     main()
