@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 def fitness_function1(xytilde,args):
     # Evaluate fitness function
 
+    if shape(args)[0] == 1:
+        args = args[0]
     x = args[0]
     y = args[1]
     edges = args[2]
@@ -49,9 +51,9 @@ def driver():
     # Routine to run as test
 
     # total guess at weights
-    alpha = 00.0
-    beta = 10.0
-    gamma = 300.0
+    alpha = 10.0
+    beta = 2.0
+    gamma = 3.0
 
     # Import some data
     filename = 'data/map_1.json'
@@ -74,7 +76,15 @@ def driver():
 
     print('Original function value is ',fitness_function1(xy,[x,y,edges,theta,alpha,beta,gamma]))
     # Optimize call
-    res = opt.minimize(fitness_function1,xy,args=[x,y,edges,theta,alpha,beta,gamma], method='Powell', options={'disp':True})
+    #res = opt.minimize(fitness_function1,xy,args=[x,y,edges,theta,alpha,beta,gamma], method='Powell', options={'disp':True})
+    # Try basinhopping
+    #res = opt.basinhopping(fitness_function1,xy,minimizer_kwargs={"method":"Powell","args":[x,y,edges,theta,alpha,beta,gamma],"options":{'disp':False}},disp=True,stepsize=2.0)
+    # Try Differential Evolution
+    bounds = zeros((size(xy),2))
+    for i in range(size(xy)):
+        bounds[i] = (xy[i]-10,xy[i]+10)
+    res = opt.differential_evolution(fitness_function1,bounds,args=[[x,y,edges,theta,alpha,beta,gamma]], disp=True)
+    
     
     # Extract solution
     xtilde = res.x[0:n_v]
@@ -130,6 +140,7 @@ def plot_map(json_object):
         vertex1 = vertices[edge[0]]
         vertex2 = vertices[edge[1]]
         plt.plot([vertex1[0], vertex2[0]], [vertex1[1], vertex2[1]], 'C0-o')
+
 
 if __name__ == "__main__":
     main()
