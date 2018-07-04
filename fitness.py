@@ -1,6 +1,6 @@
 from numpy import *
 from math import *
-from import_data import get_vertices_edges
+from import_data import get_vertices_edges, from_json_file, save_json_file
 import scipy.optimize as opt
 
 def fitness_function1(xytilde,args):
@@ -78,6 +78,18 @@ def main():
 
     print(xtilde)
     print(ytilde)
+    
+    # Put it into a dictionary
+    vertices = []
+    for xtilde, ytilde in zip(xtilde, ytilde):
+        vertices.append({'x' : xtilde, 'y' : ytilde})
+    
+    # Hack: All we need to do is replace the vertices from the original file
+    json_object = from_json_file(filename)
+    json_object['vertices'] = vertices
+    
+    print(json_object)
+    save_json_file(json_object, "optimized.json")
     
 if __name__ == "__main__":
     main()

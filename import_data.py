@@ -64,3 +64,10 @@ def get_vertices_edges(filepath):
     json_object = from_json_file(filepath)
     
     return convert_vertices(json_object), convert_edges(json_object)
+
+def save_json_file(json_object, filename):
+    """
+    Saves the json object to filename
+    """
+    with open(filename, 'w') as file:
+        json.dump(json_object, file)
