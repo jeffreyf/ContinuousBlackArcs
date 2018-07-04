@@ -1,5 +1,6 @@
 from numpy import *
 from math import *
+from import_data import get_vertices_edges
 
 def fitness_function1(xytilde,x,y,edges,theta,alpha,beta,gamma):
     # Evaluate fitness function
@@ -37,13 +38,15 @@ def main():
     alpha = 1.0
     beta = 2.0
     gamma = 3.0
-
-    # Create test data
-    x = array([1,2,3,4,5,6])
-    y = array([2,3,4,5,6,7])
-    n_v = size(x)
-
-    edges = array([[0,1],[1,2],[2,3],[3,4],[4,5]])
+    
+    # Import some data
+    filename = 'data/map_1.json'
+    vertices, edges = get_vertices_edges(filename)
+    
+    # Re-rrange data
+    x = vertices[:, 0]
+    y = vertices[:, 1]
+    
     n_e = shape(edges)[0]
     theta = zeros(n_e)
     for j in range(n_e):
@@ -54,7 +57,7 @@ def main():
     # Create test array as initial data
     xy = concatenate((x,y))
     # Move something
-    xy[3] = 3
+    #xy[3] = 3
 
     # Evaluate fitness function
     test = fitness_function1(xy,x,y,edges,theta,alpha,beta,gamma)
