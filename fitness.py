@@ -6,6 +6,8 @@ import scipy.optimize as opt
 def fitness_function1(xytilde,args):
     # Evaluate fitness function
 
+    if shape(args)[0] == 1:
+        args = args[0]
     x = args[0]
     y = args[1]
     edges = args[2]
@@ -69,8 +71,16 @@ def main():
 
     print('Original function value is ',fitness_function1(xy,[x,y,edges,theta,alpha,beta,gamma]))
     # Optimize call
-    res = opt.minimize(fitness_function1,xy,args=[x,y,edges,theta,alpha,beta,gamma], method='Powell', options={'disp':True})
-
+    #res = opt.minimize(fitness_function1,xy,args=[x,y,edges,theta,alpha,beta,gamma], method='Powell', options={'disp':True})
+    # Try basinhopping
+    #res = opt.basinhopping(fitness_function1,xy,minimizer_kwargs={"method":"Powell","args":[x,y,edges,theta,alpha,beta,gamma],"options":{'disp':False}},disp=True,stepsize=2.0)
+    # Try Differential Evolution
+    bounds = zeros((size(xy),2))
+    for i in range(size(xy)):
+        bounds[i] = (xy[i]-10,xy[i]+10)
+    res = opt.differential_evolution(fitness_function1,bounds,args=[[x,y,edges,theta,alpha,beta,gamma]], disp=True)
+    
+    
     # Extract solution
     xtilde = res.x[0:n_v]
     ytilde = res.x[n_v:]
