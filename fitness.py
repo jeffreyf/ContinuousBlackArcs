@@ -14,7 +14,9 @@ def deviation(theta):
     dev_value = zeros(n_e)
     for i in range(n_e):
         dev_value[i] = min(fractional_part[i],1.0-fractional_part[i])
-
+    
+    plt.hist(dev_value, 30)
+    plt.show()
     return max(dev_value)
 
 def fitness_function1(xytilde,args):
@@ -55,22 +57,24 @@ def fitness_function1(xytilde,args):
     
     
 def main():
-    filename = 'data/map_1.json'
+    do_rotation = False
+    filename = 'data/map_2.json'
     vertices, edges = get_vertices_edges(filename)
     # Grab the histogram data
-    h = plot_thetas(vertices, edges)
-    plt.show()
-    top_indices = flip(argsort(h[0]), axis=0)[:1]
-    avg = average(h[1][top_indices], weights=h[0][top_indices])
-    theta = pi / 2 - avg
-    theta = -theta
-    print("Rotating using theta {}".format(theta))
-    # HARD CODED ROTATION
-    rotation = matrix([[cos(theta), -sin(theta)], [sin(theta), cos(theta)]])
-    rotated = matmul(rotation, vertices.transpose())
-    vertices = array(rotated.transpose())
-    
-    json_object = driver(vertices=vertices, edges=edges)
+    if do_rotation:
+        h = plot_thetas(vertices, edges)
+        plt.show()
+        top_indices = flip(argsort(h[0]), axis=0)[:1]
+        avg = average(h[1][top_indices], weights=h[0][top_indices])
+        theta = pi / 2 - avg
+        theta = -theta
+        print("Rotating using theta {}".format(theta))
+        # HARD CODED ROTATION
+        rotation = matrix([[cos(theta), -sin(theta)], [sin(theta), cos(theta)]])
+        rotated = matmul(rotation, vertices.transpose())
+        vertices = array(rotated.transpose())
+        
+    json_object = driver(filename)
     plot_map(json_object)
     plot_vertices_edges(vertices, edges, 'C1--')
     plt.show()
@@ -83,14 +87,14 @@ def driver(filename='data/map_1.json', vertices=None, edges=None):
 
     # total guess at weights
     alpha = 1.0e-5
-    beta = 1.0
+    beta = 2.0
     gamma = 1.0
 
     # Import some data
     if vertices is None or edges is None:
+        print("Getting vertices edges from file")
         vertices, edges = get_vertices_edges(filename)
     
-
     # Re-arrange data
     x = vertices[:, 0]
     y = vertices[:, 1]
@@ -131,20 +135,21 @@ def driver(filename='data/map_1.json', vertices=None, edges=None):
         thetatilde[j] = arctan2(xtilde[node2]-xtilde[node1],ytilde[node2]-ytilde[node1])
 
     # Compute terms of fitness functional
-    fitness1 = 0.0
+    fitness1 = []
     for i in range(n_v):
-        fitness1 += alpha*((xtilde[i]-x[i])**2 + (ytilde[i]-y[i])**2)
-    fitness2 = 0.0
-    fitness3 = 0.0
+        fitness1.append(alpha*((xtilde[i]-x[i])**2 + (ytilde[i]-y[i])**2))
+    fitness2 = []
+    fitness3 = []
     for j in range(n_e):
-        fitness2 += beta*(thetatilde[j]-theta[j])**2
-        fitness3 += gamma*(sin(8*thetatilde[j]))**2
+        fitness2.append(beta*(thetatilde[j]-theta[j])**2)
+        fitness3.append(gamma*(sin(8*thetatilde[j]))**2)
         
     print('Max node movement is ',sqrt(max((xtilde-x)**2+(ytilde-y)**2)))
 
     print('Max deviation from multiple of pi/8 in original map is ',deviation(theta),' for optimized map is ',deviation(thetatilde))
 
-    print('fitness functional term1 = ',fitness1,', term2 = ',fitness2,', term3 = ',fitness3)
+    print('fitness functional term1 = ',sum(fitness1),', term2 = ',sum(fitness2),', term3 = ',sum(fitness3))
+    print('fitness functional medians term1 = ',median(fitness1),', term2 = ',median(fitness2),', term3 = ',median(fitness3))
 
 
     # Put it into a dictionary
