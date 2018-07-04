@@ -4,6 +4,19 @@ from import_data import get_vertices_edges, from_json_file, save_json_file, conv
 import scipy.optimize as opt
 import matplotlib.pyplot as plt
 
+def deviation(theta):
+    # Compute maximum deviation from integer value
+
+    # Take fractional part of theta/(pi/8)
+    fractional_part = (theta*8/pi) % 1.0
+
+    n_e = size(theta)
+    dev_value = zeros(n_e)
+    for i in range(n_e):
+        dev_value[i] = min(fractional_part[i],1.0-fractional_part[i])
+
+    return max(dev_value)
+
 def fitness_function1(xytilde,args):
     # Evaluate fitness function
 
@@ -109,13 +122,9 @@ def driver(filename='data/map_1.json'):
         fitness2 += beta*(thetatilde[j]-theta[j])**2
         fitness3 += gamma*(sin(8*thetatilde[j]))**2
         
-    print('Movement of nodes:')
-    print(xtilde-x)
-    print(ytilde-y)
+    print('Max node movement is ',sqrt(max((xtilde-x)**2+(ytilde-y)**2)))
 
-    print('Original angles as multiples of pi/8, followed by new angles:')
-    print(theta*8/pi)
-    print(thetatilde*8/pi)
+    print('Max deviation from multiple of pi/8 in original map is ',deviation(theta),' for optimized map is ',deviation(thetatilde))
 
     print('fitness functional term1 = ',fitness1,', term2 = ',fitness2,', term3 = ',fitness3)
 
@@ -141,6 +150,7 @@ def plot_map(json_object, plot_arg='C0-o'):
         vertex1 = vertices[edge[0]]
         vertex2 = vertices[edge[1]]
         plt.plot([vertex1[0], vertex2[0]], [vertex1[1], vertex2[1]], plot_arg)
+
 
 
 if __name__ == "__main__":
