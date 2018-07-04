@@ -55,29 +55,41 @@ def fitness_function1(xytilde,args):
     
     
 def main():
-    filename = 'data/map_3.json'
-    json_object = driver(filename)
-    plot_map(json_object)
-    original_json = from_json_file(filename)
-    plot_map(original_json, 'C1--')
-    plt.show()
-    
-def driver(filename='data/map_1.json'):
-    # Routine to run as test
-
-    # total guess at weights
-    alpha = 1.0e-6
-    beta = 2.0
-    gamma = 1.0
-
-    # Import some data
+    filename = 'data/map_1.json'
     vertices, edges = get_vertices_edges(filename)
-    
+    # Grab the histogram data
+    h = plot_thetas(vertices, edges)
+    plt.show()
+    top_indices = flip(argsort(h[0]), axis=0)[:1]
+    avg = average(h[1][top_indices], weights=h[0][top_indices])
+    theta = pi / 2 - avg
+    theta = -theta
+    print("Rotating using theta {}".format(theta))
     # HARD CODED ROTATION
-    theta = -.4
     rotation = matrix([[cos(theta), -sin(theta)], [sin(theta), cos(theta)]])
     rotated = matmul(rotation, vertices.transpose())
     vertices = array(rotated.transpose())
+    
+    json_object = driver(vertices=vertices, edges=edges)
+    plot_map(json_object)
+    plot_vertices_edges(vertices, edges, 'C1--')
+    plt.show()
+    
+def driver(filename='data/map_1.json', vertices=None, edges=None):
+    """
+    Either pass in a jsonfilename, or vertices and edges
+    """
+    # Routine to run as test
+
+    # total guess at weights
+    alpha = 1.0e-5
+    beta = 1.0
+    gamma = 1.0
+
+    # Import some data
+    if vertices is None or edges is None:
+        vertices, edges = get_vertices_edges(filename)
+    
 
     # Re-arrange data
     x = vertices[:, 0]
