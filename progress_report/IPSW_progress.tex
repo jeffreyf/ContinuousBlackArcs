@@ -1,0 +1,324 @@
+\documentclass[12pt,t,xcolor=dvipsnames]{beamer}
+\usepackage{amsmath,amssymb}
+\usepackage{multirow}
+\usepackage{subfigure}
+\usepackage{pgfplots}
+
+
+% Beamer Commands
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}
+{%
+\hspace*{0.7\linewidth}\insertshorttitle - p.\insertframenumber
+}
+\setbeamertemplate{footnote}
+{%
+\insertfootnotetext
+}
+\setbeamercolor{footnote mark}{fg=white}
+\setbeamertemplate{frametitle}[default][center]
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{itemize subitem}[triangle]
+\setbeamercolor{itemize subitem}{fg=Plum}
+\setbeamerfont{itemize subitem}{size=\normalsize}
+\setbeamercolor{alerted text}{fg=Magenta}
+\setbeamerfont{institute}{size=\normalsize}
+\setbeamerfont{list label}{series=\bfseries}
+\usefonttheme[onlylarge]{structurebold} 
+
+\newcommand{\alerta}[1]{{\usebeamercolor[fg]{frametitle} #1}}
+
+% Title Page Stuff
+\title{Progress Report on Black Arcs Problem}
+\date{July 4, 2018}
+
+
+\begin{document}
+
+% Title Page
+% - Begin Slide -----
+\maketitle
+
+% - Begin Slide -----
+\begin{frame}
+  \frametitle{Problem Summary}
+  \onslide*<1>{
+\vspace*{-12pt}
+  \begin{center}
+    Natural graphs of city layouts don't ``look nice''\\[12pt]
+
+    \includegraphics[width=\textwidth]{original_sackville}
+  \end{center}}%
+  \onslide*<2>{
+    What does it mean to ``look nice''?
+    \begin{itemize}
+    \item Heuristic idea: sharp angles
+    \item Ideal to have small set of allowable angles
+    \item We take these to be multiples of $\pi/8$
+    \end{itemize}
+
+    Problem: how to translate graph nodes/edges to make angles more
+    like multiples of $\pi/8$?
+    }
+
+\end{frame}
+
+% - Begin Slide -----
+\begin{frame}
+  \frametitle{The Data}
+
+  Get map data in list format:
+  \begin{itemize}
+  \item List of $n_v$ vertices as $(x_i,y_i)$ coordinates
+  \item List of $n_e$ edges as vertex pairs
+  \end{itemize}
+
+  \begin{center}
+    Look to translate nodes $(x_i,y_i) \rightarrow (\tilde{x}_i,\tilde{y}_i)$ so
+    to ``improve'' angles formed by edges
+  \end{center}
+\pause
+  Three principles:
+  \begin{enumerate}
+  \item Don't let nodes move a lot
+  \item Don't let angles change a lot
+  \item Make angles equal to $k\pi/8$ for some $k\in\mathbb{Z}$
+  \end{enumerate}
+
+
+\end{frame}
+
+
+% - Begin Slide -----
+\begin{frame}
+  \frametitle{Continuous Optimization Approach}
+
+  \begin{center}
+    Central idea: relax constraint
+  \end{center}
+
+  Compose {\it fitness function} from three terms
+  \begin{enumerate}
+  \item Penalize node movement: $\displaystyle\sum_{i=1}^{n_v}
+    \left((\tilde{x}_i-x_i)^2+(\tilde{y}_i - y_i)^2\right)$
+  \item Penalize angle change: $\displaystyle\sum_{j=1}^{n_e} \left(\tilde{\theta}_j -
+    \theta_j\right)^2$
+    \begin{itemize}
+    \item Given edge $e_j = \left\{(x_k,y_k),(x_\ell,y_\ell)\right\}$,
+      define $\theta_j = \text{arctan2}(x_\ell-x_k,y_\ell-y_k)$
+      \item ``Four-quadrant inverse tangent''
+    \end{itemize}
+    \item Penalize difference from $k\pi/8$: $\displaystyle\sum_{j=1}^{n_e}\sin^2\left(8\tilde{\theta}_j\right)$
+  \end{enumerate}
+  
+\end{frame}
+
+% - Begin Slide -----
+\begin{frame}
+\frametitle{Fitness Function}
+
+Take weighted sum of these:
+\begin{align*}
+f(\tilde{x},\tilde{y}) = \alpha&\sum_{i=1}^{n_v}
+\left((\tilde{x}_i-x_i)^2+(\tilde{y}_i - y_i)^2\right)\\
+& + \beta\sum_{j=1}^{n_e} \left(\tilde{\theta}_j - \theta_j\right)^2
++\gamma\sum_{j=1}^{n_e}\sin^2\left(8\tilde{\theta}_j\right)
+\end{align*}
+
+Problem: How to choose $\alpha$, $\beta$, $\gamma$?
+\begin{itemize}
+\item First pass: experiment!
+  \begin{itemize}
+  \item Choosing equal weights leads to difficult optimization
+  \item Moving nodes a lot (in coordinate space) is okay
+  \item Roughly $\alpha = 10^{-5}$, $\beta = \gamma = 1$
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+% - Begin Slide -----
+\begin{frame}
+  \frametitle{Black-Box Optimization}
+
+  Many black-box optimization tools available
+  \begin{itemize}
+  \item Derivative-free optimization
+    \begin{itemize}
+    \item Nelder-Mead, Powell, \ldots
+    \item Try to identify search direction, go downhill
+    \end{itemize}
+  \item Basin-hopping
+    \begin{itemize}
+    \item Combine these with local searches above
+    \end{itemize}
+  \item Differential Evolution
+    \begin{itemize}
+    \item Metaheuristic method
+    \item Create population of candidate solutions, recombine to
+      improve optimality
+    \end{itemize}
+  \item Many others
+    \begin{itemize}
+      \item Chose to use just those available in scipy
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+% - Begin Slide -----
+\begin{frame}
+  \frametitle{First results}
+\begin{center}
+  \includegraphics[width=\linewidth]{map1}
+\end{center}
+\end{frame}
+
+% - Begin Slide -----
+\begin{frame}
+  \frametitle{Second results}
+\begin{center}
+  \includegraphics[width=\linewidth]{map2}
+\end{center}
+  
+
+\end{frame}
+
+% - Begin Slide -----
+\begin{frame}
+  \frametitle{Measuring Quality}
+
+  Visual quality seems good, but what about some numbers?
+  \onslide*<1>{
+  \begin{itemize}
+  \item For first example
+    \begin{itemize}
+    \item Reduce fitness function from 6.35 to 0.67
+    \item Reduce scaled deviation from angles of $k\pi/8$ from 0.45
+      to 0.10
+    \end{itemize}
+  \end{itemize}}%
+  \onslide*<2>{
+    \begin{itemize}
+    \item For second example
+      \begin{itemize}
+      \item Reduce fitness function from 21.29 to 1.61
+      \item Reduce scaled deviation from angles of $k\pi/8$ from 0.48
+        to 0.15
+      \end{itemize}
+    \end{itemize}
+
+  \begin{center}
+    \includegraphics[width=0.48\linewidth]{../pngs/original_deviation_histogram}
+    \hspace*{0.01\linewidth}
+    \includegraphics[width=0.48\linewidth]{../pngs/optimized_deviation_histogram}
+  \end{center}}%
+    
+        
+\end{frame}
+
+% - Begin Slide -----
+\begin{frame}
+  \frametitle{Some choices}
+
+  \begin{center}
+    \includegraphics[width=0.48\linewidth]{../pngs/closer_terms}
+    \hspace*{0.01\linewidth}
+    \includegraphics[width=0.48\linewidth]{../pngs/stuckout_term2}
+  \end{center}
+    
+  Two results from slightly different optimizer options
+  \begin{itemize}
+    \item Graph at right has much lower deviation in angles from
+      $k\pi/8$
+    \item Achieving lower deviation comes at trade-off with node displacement
+  \end{itemize}
+\end{frame}
+
+% - Begin Slide -----
+\begin{frame}
+  \frametitle{Next steps}
+
+  Working with Sackville map adds some complexity
+  \begin{itemize}
+  \item Direct application of optimization approach only reduces maximum
+    deviation from 0.50 to 0.42
+  \end{itemize}
+
+  Idea: rotate first, then optimize relative to rotated map
+  \begin{itemize}
+  \item Eyeball $23^\circ$ rotation, from histogram of initial angles
+    \begin{itemize}
+    \item Can we automate this reliably?
+    \end{itemize}
+  \item Working on optimization after rotation
+  \end{itemize}
+
+\end{frame}
+
+% - Begin Slide -----
+\begin{frame}
+  \frametitle{Hot off the press!}
+
+  \onslide*<1>{
+    \begin{center}
+      \includegraphics[width=\linewidth]{../pngs/map3_optimized_after_rotation}
+    \end{center}
+  }%
+  \onslide*<2>{
+  \begin{center}
+    \includegraphics[width=0.48\linewidth]{../pngs/map3_orig_deviations}
+    \hspace*{0.01\linewidth}
+    \includegraphics[width=0.48\linewidth]{../pngs/map3_optimized_deviations}
+  \end{center}}%
+  
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{(Integer) Linear Models}
+  \begin{minipage}[l]{0.45\textwidth}
+    \includegraphics[width=\textwidth]{snapping.pdf}
+    \end{minipage}
+    \begin{minipage}[r]{0.48\textwidth}
+    \begin{align*}
+      \min \sum_{(i,j) \in E} |\epsilon_{i,j,1}| +& |\epsilon_{i,j,2}| \\
+      \tilde{v}_i + \ell_{i,j}\sum_{d\in 1\dots 4}c_{i,j,d}w_d &= v_j+\epsilon_{i,j}\\
+      c_{i,j,d} &\in \{0, 1\}\\
+      \sum_{d} c_{i,j,d} &= 1\\
+      \ell_{i,j} &= \| v_i - v_j\|
+    \end{align*}
+  \end{minipage}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Linear Models}
+  \begin{minipage}[l]{0.45\textwidth}
+    \includegraphics[width=\columnwidth]{snapping2.pdf}
+    \end{minipage}
+    \begin{minipage}[r]{0.48\textwidth}
+    \begin{align*}
+       \max \sum_{(i,j) \in E} \langle z_{i,j} &, w^*_{i,j} \rangle\\
+      z_{i,j} & = (\tilde{v}_{i} - \tilde{v}_{j})/l_{i,j}\\
+       w^*_{i,j}&= \text{closest $w_d$}\\
+       \ell_{i,j} &= \| v_i - v_j\|
+    \end{align*}
+    In both cases we need penalties/bounds to prevent vertices from
+    moving too far.
+  \end{minipage}
+\end{frame}
+
+\end{document}
+
+% - Begin Slide -----
+\begin{frame}
+\frametitle{}
+
+\end{frame}
+
+% - Begin Slide -----
+\begin{frame}
+\frametitle{}
+
+\end{frame}
