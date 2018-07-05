@@ -64,14 +64,13 @@ def fitness_function1(xytilde,args):
         # The call back takes arguments vertices, edges, frequency
         cb(vertices_from_tilde(xtilde, ytilde), edges)
 
-    return fitness
-    
+    return fitness    
 
 
 def main():
     clear_gif_staging()
-    do_rotation = True
-    filename = 'data/map_4_50_nodes.json'
+    do_rotation = False
+    filename = 'data/map_1.json'
     original_json_object = from_json_file(filename)
     vertices, edges = convert_vertices(original_json_object), convert_edges(original_json_object)
     # Grab the histogram data
@@ -86,29 +85,15 @@ def main():
         
     
     
-    cb = make_plot_callback(vertices, edges)#None #plot_and_save_vertices_edges
+    cb = None# make_plot_callback(vertices, edges)#None #plot_and_save_vertices_edges
     json_object = driver(filename, vertices=vertices, edges=edges,
                          cb=cb)
     plot_map(json_object)
     plot_vertices_edges(vertices, edges, 'C1--')
     plt.show()
     
-def driver(filename='data/map_1.json', vertices=None, edges=None, cb=None):
-    """
-    Either pass in a jsonfilename, or vertices and edges
-    """
-    # Routine to run as test
-
-    # total guess at weights
-    alpha = 1.0e-7
-    beta = 1.0e-2
-    gamma = 1.0
-
-    # Import some data
-    if vertices is None or edges is None:
-        print("Getting vertices edges from file")
-        vertices, edges = get_vertices_edges(filename)
     
+def get_initial_arguments(vertices, edges, alpha, beta, gamma, cb):
     # Re-arrange data
     x = vertices[:, 0]
     y = vertices[:, 1]
@@ -123,12 +108,31 @@ def driver(filename='data/map_1.json', vertices=None, edges=None, cb=None):
 
     # Create test array as initial data
     xy = concatenate((x,y))
+    
+    return x, y, theta, xy, n_v, n_e, [x,y,edges,theta,alpha,beta,gamma, cb]
+
+def driver(filename='data/map_1.json', vertices=None, edges=None, cb=None):
+    """
+    Either pass in a jsonfilename, or vertices and edges
+    """
+    # Routine to run as test
+    # Import some data
+    if vertices is None or edges is None:
+        print("Getting vertices edges from file")
+        vertices, edges = get_vertices_edges(filename)
+
+    # total guess at weights
+    alpha = 1.0e-7
+    beta = 1.0e-3
+    gamma = 1.0
+    
+    x, y, theta, xy, n_v, n_e, args = get_initial_arguments(vertices, edges, alpha, beta, gamma, cb)
 
     start_time = time.time()
 
-    print('Original function value is ',fitness_function1(xy,[x,y,edges,theta,alpha,beta,gamma]),' map has ',n_v,' vertices and ',n_e,' edges')
+    print('Original function value is ',fitness_function1(xy,args),' map has ',n_v,' vertices and ',n_e,' edges')
     # Optimize call
-    res = opt.minimize(fitness_function1,xy,args=[x,y,edges,theta,alpha,beta,gamma, cb], method='Powell', options={'disp':True})
+    res = opt.minimize(fitness_function1,xy,args=args, method='Powell', options={'disp':True})
     # Try basinhopping
     #res = opt.basinhopping(fitness_function1,xy,minimizer_kwargs={"method":"Powell","args":[x,y,edges,theta,alpha,beta,gamma],"options":{'disp':False}},disp=True,stepsize=2.0)
     # Try Differential Evolution
