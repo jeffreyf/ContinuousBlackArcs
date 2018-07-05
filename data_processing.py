@@ -124,7 +124,7 @@ def plot_and_save_vertices_edges(vertices, edges, frequency = 100, filepath='gif
         plot_vertices_edges(original_vetices, original_edges, 'C1--')
     
     num_files = len([name for name in os.listdir(filepath) if os.path.isfile(os.path.join(filepath,name))])
-    turn_off_plot_frame()
+    #turn_off_plot_frame()
     plt.savefig("{}{}".format(filepath, num_files))
     plt.close()
     

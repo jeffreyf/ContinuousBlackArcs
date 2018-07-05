@@ -66,11 +66,8 @@ def fitness_function1(xytilde,args):
 
     return fitness    
 
-
-def main():
+def pre_process_data(filename='data/map_1.json', do_rotation=False):
     clear_gif_staging()
-    do_rotation = False
-    filename = 'data/map_1.json'
     original_json_object = from_json_file(filename)
     vertices, edges = convert_vertices(original_json_object), convert_edges(original_json_object)
     # Grab the histogram data
@@ -84,13 +81,25 @@ def main():
         save_json_file(original_json_object, "original_rotated.json")
         
     
+    return vertices, edges, original_json_object
+
+def post_optimization_plotting(json_object, vertices, edges, new_vertices):
+    if json_object is not None:
+        plot_map(json_object)
+    elif new_vertices is not None:
+        plot_vertices_edges(new_vertices, edges, 'C0-o')
+    plot_vertices_edges(vertices, edges, 'C1--')
+    plt.show()
     
+
+def main():
+    filename = 'data/map_1.json'
+    vertices, edges, original_json_object = pre_process_data(filename, False)
     cb = None# make_plot_callback(vertices, edges)#None #plot_and_save_vertices_edges
     json_object = driver(filename, vertices=vertices, edges=edges,
                          cb=cb)
-    plot_map(json_object)
-    plot_vertices_edges(vertices, edges, 'C1--')
-    plt.show()
+    
+    post_optimization_plotting(json_object, vertices, edges)
     
     
 def get_initial_arguments(vertices, edges, alpha, beta, gamma, cb):
