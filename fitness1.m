@@ -1,32 +1,30 @@
-function [x, fval, output] = fitness1(xytilde, edge, alpha, theta, gamma)
+function [result] = fitness1(vertices, edge, alpha, beta, gamma, xytilde)
 % This function uses to evaluate the fitness function
-
-[x, y] = csvread('data/map_1.csv');
-
-n_v = length(x);
-n_e = length(theta);
-xtilde = xytilde(1:n_v);
-ytilde = xytilde((n_v+1):(2*n_v));
-
 % compute theta
-thetatilde = zeros(size(edge));
+x = vertices(:,1);
+y = vertices(:,2);
+n_v = length(x);
+n_e = length(edge);
+xtilde = xytilde(1:size(x));
+ytilde = xytilde(size(x)+1:end);
+
+theta = zeros(size(n_e));
+
 for i = 1:n_e
-    node1 = edge(i);
-    node2 = edge(i+1);
-    thetatilde(i) = atan((xtilde(node2)-xtilde(node1))/(ytilde(node2))-xtilde(node1));
+    node1 = edge(i,1)+1;
+    node2 = edge(i,2)+1;
+    theta(i) = atan((xtilde(node2)-xtilde(node1))/(ytilde(node2))-xtilde(node1));
 end
 
 % compute fitness function
+result = 0;
 for i = 1:n_v
-    fitness = fitness + alpha*((xtilde(i)-x(i))^2 + (ytilde(i)-y(i))^2);
+    result = result + alpha*((xtilde(i)-x(i))^2 + (ytilde(i)-y(i))^2);
 end
 
 for j = 1:n_e
-    fitness = fitness + beta*(theta(j) - thetatilde(j))^2;
-    fitness = fitness + gamma*(sin(8*thetatilde(j)))^2;
+    result = result + beta*(theta(j) - theta(j))^2 + gamma*(sin(8*theta(j)))^2;
 end
 
-options = optimset('Display', 'iter');
-[x, fval, output] = fminsearch(@fitness, xytilde, options);
 
 end
