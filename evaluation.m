@@ -1,7 +1,7 @@
 function [fval] = evaluation()
-alpha = 1;
-beta = 2;
-gamma = 3;
+alpha = 1.0e-05;
+beta = 1;
+gamma = 1;
 
 vertices = csvread('map1_vertices.csv');
 edge = csvread('map1_edges.csv');
