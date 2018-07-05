@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jul  5 11:32:00 2018
-
-@author: codej
-"""
-
 import numpy as np
 from deap import base, creator, benchmarks, cma, tools, algorithms
 from fitness import fitness_function1, get_initial_arguments, pre_process_data, post_optimization_plotting
@@ -60,7 +53,7 @@ if __name__ == "__main__":
     # total guess at weights
     alpha = 1.0e-8
     beta = 1.0e-5
-    gamma = 1.0e-5
+    gamma = 1.0e-6
     
     vertices, edges, original_json_object = pre_process_data(filename, True)
     cb = None# make_plot_callback(vertices, edges)#None #plot_and_save_vertices_edges
