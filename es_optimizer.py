@@ -58,7 +58,7 @@ if __name__ == "__main__":
     filename = 'data/map_1.json'
     
     # total guess at weights
-    alpha = 1.0e-7
+    alpha = 1.0e-5
     beta = 1.0e-3
     gamma = 1.0
     
