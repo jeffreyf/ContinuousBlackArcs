@@ -6,7 +6,10 @@ Data processing functions
 from numpy import *
 import matplotlib.pyplot as plt
 from import_data import get_vertices_edges, from_json_file, save_json_file, convert_edges, convert_vertices
+import os, os.path
 
+# Ugly global variable
+__plot_save_count = 0
 
 def rotate_vertices(vertices, theta):
     rotation = matrix([[cos(theta), -sin(theta)], [sin(theta), cos(theta)]])
@@ -72,3 +75,36 @@ def plot_thetas_from_filename(filename, bins=20):
 def plot_thetas(vertices, edges, bins=20):
     theta = get_thetas(vertices, edges)
     return plt.hist(theta % (pi / 2), bins)
+
+
+def vertices_from_tilde(xtilde, ytilde):
+    return concatenate([(xtilde, ytilde)], axis=1).transpose()
+
+def clear_gif_staging(staging_directory='gif/staging/'):
+    __plot_save_count = 0
+    
+    if not os.path.exists(staging_directory):
+        os.makedirs(staging_directory)
+    else:
+        # Clear it out
+        # See https://stackoverflow.com/questions/185936/how-to-delete-the-contents-of-a-folder-in-python
+        for file in os.listdir(staging_directory):
+            filepath = os.path.join(staging_directory, file)
+            try:
+                if os.path.isfile(filepath):
+                    os.unlink(filepath)
+            except Exception as e:
+                print(e)
+
+def plot_and_save_vertices_edges(vertices, edges, filepath='gif/staging/', filename='{}.png',
+                                 frequency = 100):
+    global __plot_save_count
+    __plot_save_count = __plot_save_count + 1
+    if __plot_save_count % frequency != 0:
+        return
+    
+    plot_vertices_edges(vertices, edges)
+    
+    num_files = len([name for name in os.listdir(filepath) if os.path.isfile(os.path.join(filepath,name))])
+    plt.savefig("{}{}".format(filepath, num_files))
+    plt.close()

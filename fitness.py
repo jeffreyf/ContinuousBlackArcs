@@ -32,6 +32,11 @@ def fitness_function1(xytilde,args):
     alpha = args[4]
     beta = args[5]
     gamma = args[6]
+    
+    if len(args) > 7:
+        cb = args[7]
+    else:
+        cb = None
 
     # Extract sizes and sub-arrays
     n_v = size(x)
@@ -53,13 +58,17 @@ def fitness_function1(xytilde,args):
     for j in range(n_e):
         fitness += beta*(thetatilde[j]-theta[j])**2
         fitness += gamma*(sin(8*thetatilde[j]))**2
+        
+    if cb is not None:
+        cb(vertices_from_tilde(xtilde, ytilde), edges)
 
     return fitness
     
 
 
 def main():
-    do_rotation = True
+    clear_gif_staging()
+    do_rotation = False
     filename = 'data/map_1.json'
     vertices, edges = get_vertices_edges(filename)
     # Grab the histogram data
@@ -69,12 +78,13 @@ def main():
         # HARD CODED ROTATION
         vertices = rotate_vertices(vertices, theta)
         
-    json_object = driver(filename, vertices=vertices, edges=edges)
+    json_object = driver(filename, vertices=vertices, edges=edges,
+                         cb=plot_and_save_vertices_edges)
     plot_map(json_object)
     plot_vertices_edges(vertices, edges, 'C1--')
     plt.show()
     
-def driver(filename='data/map_1.json', vertices=None, edges=None):
+def driver(filename='data/map_1.json', vertices=None, edges=None, cb=None):
     """
     Either pass in a jsonfilename, or vertices and edges
     """
@@ -107,7 +117,7 @@ def driver(filename='data/map_1.json', vertices=None, edges=None):
 
     print('Original function value is ',fitness_function1(xy,[x,y,edges,theta,alpha,beta,gamma]))
     # Optimize call
-    res = opt.minimize(fitness_function1,xy,args=[x,y,edges,theta,alpha,beta,gamma], method='Powell', options={'disp':True})
+    res = opt.minimize(fitness_function1,xy,args=[x,y,edges,theta,alpha,beta,gamma, cb], method='Powell', options={'disp':True})
     # Try basinhopping
     #res = opt.basinhopping(fitness_function1,xy,minimizer_kwargs={"method":"Powell","args":[x,y,edges,theta,alpha,beta,gamma],"options":{'disp':False}},disp=True,stepsize=2.0)
     # Try Differential Evolution
