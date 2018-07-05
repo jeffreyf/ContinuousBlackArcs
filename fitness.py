@@ -83,7 +83,7 @@ def pre_process_data(filename='data/map_1.json', do_rotation=False):
     
     return vertices, edges, original_json_object
 
-def post_optimization_plotting(json_object, vertices, edges, new_vertices):
+def post_optimization_plotting(json_object, vertices, edges, new_vertices=None):
     if json_object is not None:
         plot_map(json_object)
     elif new_vertices is not None:
