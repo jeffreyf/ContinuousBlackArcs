@@ -23,7 +23,7 @@ def calculate_desired_theta(vertices, edges):
     """
     h = plot_thetas(vertices, edges)
     plt.show()
-    top_indices = flip(argsort(h[0]), axis=0)[:5]
+    top_indices = flip(argsort(h[0]), axis=0)[:1]
     avg = average(h[1][top_indices], weights=h[0][top_indices])
     theta = pi / 2 - avg
     theta = -theta
@@ -96,14 +96,32 @@ def clear_gif_staging(staging_directory='gif/staging/'):
             except Exception as e:
                 print(e)
 
-def plot_and_save_vertices_edges(vertices, edges, filepath='gif/staging/', filename='{}.png',
-                                 frequency = 100):
+def make_plot_callback(original_vertices, original_edges, frequency=100):
+    """
+    Returns a plot callback that can take the original vertices and edges
+    """
+    
+    def plot_callback(vertices, edges, frequency=100):
+        """
+        Call back that can take original vertices and edges
+        """
+        plot_and_save_vertices_edges(vertices, edges, frequency, original_vetices=original_vertices,
+                                     original_edges=original_edges)
+        
+    return plot_callback
+    
+
+def plot_and_save_vertices_edges(vertices, edges, frequency = 100, filepath='gif/staging/',
+                                 filename='{}.png', original_vetices=None, original_edges=None):
     global __plot_save_count
     __plot_save_count = __plot_save_count + 1
     if __plot_save_count % frequency != 0:
         return
     
     plot_vertices_edges(vertices, edges)
+    
+    if original_vetices is not None and original_edges is not None:
+        plot_vertices_edges(original_vetices, original_edges, 'C1--')
     
     num_files = len([name for name in os.listdir(filepath) if os.path.isfile(os.path.join(filepath,name))])
     turn_off_plot_frame()

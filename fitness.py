@@ -69,7 +69,6 @@ def fitness_function1(xytilde,args):
 
 
 def main():
-    cb = None #plot_and_save_vertices_edges
     clear_gif_staging()
     do_rotation = True
     filename = 'data/map_4_50_nodes.json'
@@ -85,7 +84,9 @@ def main():
         original_json_object = set_json_vertices(original_json_object, vertices)
         save_json_file(original_json_object, "original_rotated.json")
         
-        
+    
+    
+    cb = make_plot_callback(vertices, edges)#None #plot_and_save_vertices_edges
     json_object = driver(filename, vertices=vertices, edges=edges,
                          cb=cb)
     plot_map(json_object)
