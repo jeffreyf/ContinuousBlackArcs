@@ -60,6 +60,7 @@ def fitness_function1(xytilde,args):
         fitness += gamma*(sin(8*thetatilde[j]))**2
         
     if cb is not None:
+        # The call back takes arguments vertices, edges, frequency
         cb(vertices_from_tilde(xtilde, ytilde), edges)
 
     return fitness
@@ -69,7 +70,7 @@ def fitness_function1(xytilde,args):
 def main():
     clear_gif_staging()
     do_rotation = False
-    filename = 'data/map_1.json'
+    filename = 'data/map_2.json'
     vertices, edges = get_vertices_edges(filename)
     # Grab the histogram data
     if do_rotation:
@@ -159,8 +160,8 @@ def driver(filename='data/map_1.json', vertices=None, edges=None, cb=None):
 
     # Put it into a dictionary
     vertices = []
-    for xtilde, ytilde in zip(xtilde, ytilde):
-        vertices.append({'x' : xtilde, 'y' : ytilde})
+    for xtilde_, ytilde_ in zip(xtilde, ytilde):
+        vertices.append({'x' : xtilde_, 'y' : ytilde_})
     
     # Hack: All we need to do is replace the vertices from the original file
     json_object = from_json_file(filename)
@@ -168,6 +169,9 @@ def driver(filename='data/map_1.json', vertices=None, edges=None, cb=None):
     
     #print(json_object)
     save_json_file(json_object, "optimized.json")
+    
+    if cb is not None:
+        cb(vertices_from_tilde(xtilde, ytilde), edges, frequency=1)
 
     return json_object
 
