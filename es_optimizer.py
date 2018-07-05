@@ -18,7 +18,7 @@ def make_fitness_function(args):
     return fitness
 
 
-def run_cma(vertices, edges, alpha, beta, gamma, cb):
+def run_cma(vertices, edges, alpha, beta, gamma, cb, lambda_=200, generations=250):
     """
     Runs a CMA-ES
     """
@@ -38,7 +38,7 @@ def run_cma(vertices, edges, alpha, beta, gamma, cb):
     np.random.seed(128)
     N = len(xy)
     
-    strategy = cma.Strategy(centroid=[0.5] * N, sigma=5.0, lambda_=20*N)
+    strategy = cma.Strategy(centroid=[0.5] * N, sigma=5.0, lambda_=lambda_)
     toolbox.register("generate", strategy.generate, creator.Individual)
     toolbox.register("update", strategy.update)
     
@@ -50,21 +50,21 @@ def run_cma(vertices, edges, alpha, beta, gamma, cb):
     stats.register("min", np.min)
     stats.register("max", np.max)
     
-    algorithms.eaGenerateUpdate(toolbox, ngen=250, stats=stats, halloffame=hof)
+    algorithms.eaGenerateUpdate(toolbox, ngen=generations, stats=stats, halloffame=hof)
     
     return hof
     
 if __name__ == "__main__":
-    filename = 'data/map_1.json'
+    filename = 'data/map_6_downtown.json'
     
     # total guess at weights
-    alpha = 1.0e-5
-    beta = 1.0e-3
-    gamma = 1.0
+    alpha = 1.0e-8
+    beta = 1.0e-5
+    gamma = 1.0e-5
     
-    vertices, edges, original_json_object = pre_process_data(filename, False)
+    vertices, edges, original_json_object = pre_process_data(filename, True)
     cb = None# make_plot_callback(vertices, edges)#None #plot_and_save_vertices_edges
-    hof = run_cma(vertices, edges, alpha, beta, gamma, cb)
+    hof = run_cma(vertices, edges, alpha, beta, gamma, cb, lambda_=500)
     
     # Extract solution
     n_v = int(len(hof.items[0]) / 2)
