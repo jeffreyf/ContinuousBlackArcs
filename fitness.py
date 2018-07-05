@@ -4,6 +4,7 @@ from import_data import get_vertices_edges, from_json_file, save_json_file, conv
 import scipy.optimize as opt
 import matplotlib.pyplot as plt
 from data_processing import *
+import time
 
 def deviation(theta):
     # Compute maximum deviation from integer value
@@ -71,7 +72,7 @@ def main():
     cb = None #plot_and_save_vertices_edges
     clear_gif_staging()
     do_rotation = True
-    filename = 'data/map_3.json'
+    filename = 'data/map_4_50_nodes.json'
     original_json_object = from_json_file(filename)
     vertices, edges = convert_vertices(original_json_object), convert_edges(original_json_object)
     # Grab the histogram data
@@ -99,7 +100,7 @@ def driver(filename='data/map_1.json', vertices=None, edges=None, cb=None):
 
     # total guess at weights
     alpha = 1.0e-7
-    beta = 1.0-3
+    beta = 1.0e-2
     gamma = 1.0
 
     # Import some data
