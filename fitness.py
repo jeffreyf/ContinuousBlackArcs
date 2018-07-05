@@ -69,15 +69,20 @@ def fitness_function1(xytilde,args):
 
 def main():
     clear_gif_staging()
-    do_rotation = False
-    filename = 'data/map_2.json'
-    vertices, edges = get_vertices_edges(filename)
+    do_rotation = True
+    filename = 'data/map_3.json'
+    original_json_object = from_json_file(filename)
+    vertices, edges = convert_vertices(original_json_object), convert_edges(original_json_object)
     # Grab the histogram data
     if do_rotation:
         theta = calculate_desired_theta(vertices, edges)
         print("Rotating using theta {}".format(theta))
         # HARD CODED ROTATION
         vertices = rotate_vertices(vertices, theta)
+        
+        original_json_object = set_json_vertices(original_json_object, vertices)
+        save_json_file(original_json_object, "original_rotated.json")
+        
         
     json_object = driver(filename, vertices=vertices, edges=edges,
                          cb=plot_and_save_vertices_edges)

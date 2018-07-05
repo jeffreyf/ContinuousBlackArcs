@@ -115,3 +115,13 @@ def turn_off_plot_frame():
     # See https://stackoverflow.com/questions/14908576/how-to-remove-frame-from-matplotlib-pyplot-figure-vs-matplotlib-figure-frame
     for spine in plt.gca().spines.values():
         spine.set_visible(False)
+        
+def set_json_vertices(json_object, vertices):
+    formatted_vertices = []
+    for vertex in vertices:
+        formatted_vertices.append({'x' : vertex[0], 'y' : vertex[1]})
+    
+    json_object["vertices"] = formatted_vertices
+    
+    return json_object
+        
