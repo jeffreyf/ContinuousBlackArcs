@@ -57,7 +57,7 @@ def fitness_function1(xytilde,args):
         fitness += alpha*((xtilde[i]-x[i])**2 + (ytilde[i]-y[i])**2)
     for j in range(n_e):
         fitness += beta*(thetatilde[j]-theta[j])**2
-        fitness += gamma*(sin(8*thetatilde[j]))**2
+        fitness += gamma*((sin(8*thetatilde[j]))**2+(sin(2*thetatilde[j]))**2)
         
     if cb is not None:
         # The call back takes arguments vertices, edges, frequency
@@ -98,8 +98,8 @@ def driver(filename='data/map_1.json', vertices=None, edges=None, cb=None):
     # Routine to run as test
 
     # total guess at weights
-    alpha = 1.0e-5
-    beta = 2.0
+    alpha = 1.0e-7
+    beta = 1.0-3
     gamma = 1.0
 
     # Import some data
@@ -122,7 +122,9 @@ def driver(filename='data/map_1.json', vertices=None, edges=None, cb=None):
     # Create test array as initial data
     xy = concatenate((x,y))
 
-    print('Original function value is ',fitness_function1(xy,[x,y,edges,theta,alpha,beta,gamma]))
+    start_time = time.time()
+
+    print('Original function value is ',fitness_function1(xy,[x,y,edges,theta,alpha,beta,gamma]),' map has ',n_v,' vertices and ',n_e,' edges')
     # Optimize call
     res = opt.minimize(fitness_function1,xy,args=[x,y,edges,theta,alpha,beta,gamma, cb], method='Powell', options={'disp':True})
     # Try basinhopping
@@ -133,6 +135,9 @@ def driver(filename='data/map_1.json', vertices=None, edges=None, cb=None):
         bounds[i] = (xy[i]-50,xy[i]+50)
     res = opt.differential_evolution(fitness_function1,bounds,args=[[x,y,edges,theta,alpha,beta,gamma]], disp=True)
     """
+
+    end_time = time.time()
+    print('Elapsed time is ',end_time-start_time)
     
     # Extract solution
     xtilde = res.x[0:n_v]
