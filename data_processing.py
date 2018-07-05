@@ -23,7 +23,7 @@ def calculate_desired_theta(vertices, edges):
     """
     h = plot_thetas(vertices, edges)
     plt.show()
-    top_indices = flip(argsort(h[0]), axis=0)[:1]
+    top_indices = flip(argsort(h[0]), axis=0)[:5]
     avg = average(h[1][top_indices], weights=h[0][top_indices])
     theta = pi / 2 - avg
     theta = -theta
@@ -106,5 +106,12 @@ def plot_and_save_vertices_edges(vertices, edges, filepath='gif/staging/', filen
     plot_vertices_edges(vertices, edges)
     
     num_files = len([name for name in os.listdir(filepath) if os.path.isfile(os.path.join(filepath,name))])
+    turn_off_plot_frame()
     plt.savefig("{}{}".format(filepath, num_files))
     plt.close()
+    
+def turn_off_plot_frame():
+    plt.axis('off')
+    # See https://stackoverflow.com/questions/14908576/how-to-remove-frame-from-matplotlib-pyplot-figure-vs-matplotlib-figure-frame
+    for spine in plt.gca().spines.values():
+        spine.set_visible(False)
