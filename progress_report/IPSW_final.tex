@@ -260,10 +260,87 @@ Problem: How to choose $\alpha$, $\beta$, $\gamma$?
       \includegraphics[width=\linewidth]{../pngs/artist_stylization}
     \end{center}
   }%
+  	\onslide*<3>{
+    \begin{center}
+      \includegraphics[width=\linewidth]{../pngs/artist_stylization_overlaid}
+    \end{center}
+  }%
+    \onslide*<4>{
+    \begin{center}
+      \includegraphics[width=\linewidth]{../pngs/map_6_cmaes}
+    \end{center}
+  }%
+\end{frame}
+
+
+  % - Begin Slide -----
+\begin{frame}
+  \frametitle{CMA-ES - What Happened?}
+
+  \begin{itemize}
+  \item Fitness of original map was 7.955456
+  \item $\alpha=1e-07$, $\beta=1.0e-3$, $\gamma=1.0e-1$
+  \item Fitness value of Powell was 1.991282
+  \item Fitness value of CMA-ES was 0.524248
+    \begin{itemize}
+    \item $\gamma$ term dominates (why we see so many 90 degree angles)
+    \end{itemize}
+  \end{itemize}
 
   
 
 \end{frame}
+
+
+% - Begin Slide -----
+%\begin{frame}
+%  \frametitle{Gravity}
+%
+%  \begin{columns}[t]
+%  \column{.5\textwidth}
+%  \centering
+%  \includegraphics[width=.95\textwidth]{../pngs/map3_original}\\
+%  \includegraphics[width=.95\textwidth]{../pngs/map3_constg}
+%  \column{.5\textwidth}
+%  \centering
+%  %\includegraphics[width=.95\textwidth]{../pngs/map3spread}\\
+%  \includegraphics[width=.95\textwidth]{../pngs/map3_constg}
+%  \end{columns}
+%  
+%  
+%\end{frame}
+
+\begin{frame}
+  \frametitle{Gravity}
+
+  \begin{columns}[t]
+  \column{1.0\textwidth}
+  \centering
+  %\includegraphics[width=.95\textwidth]{../pngs/map_6_powell}\\
+  \includegraphics[height=.45\textheight]{../pngs/map3_original}\\
+  \includegraphics[width=.65\textwidth]{../pngs/map3_constg}
+  \end{columns}
+  
+  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Gravity}
+
+  \begin{columns}[t]
+  \column{1.0\textwidth}
+  \centering
+  %\includegraphics[width=.95\textwidth]{../pngs/map_6_powell}\\
+  \includegraphics[height=.45\textheight]{../pngs/map3_original}\\
+  \includegraphics[width=.65\textwidth]{../pngs/map3spread}
+  \end{columns}
+  
+  
+\end{frame}
+
+
+
 
 \end{document}
 

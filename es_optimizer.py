@@ -31,7 +31,7 @@ def run_cma(vertices, edges, alpha, beta, gamma, cb, lambda_=200, generations=25
     np.random.seed(128)
     N = len(xy)
     
-    strategy = cma.Strategy(centroid=[0.5] * N, sigma=5.0, lambda_=lambda_)
+    strategy = cma.Strategy(centroid=xy, sigma=0.001, lambda_=lambda_)
     toolbox.register("generate", strategy.generate, creator.Individual)
     toolbox.register("update", strategy.update)
     
@@ -51,13 +51,14 @@ if __name__ == "__main__":
     filename = 'data/map_6_downtown.json'
     
     # total guess at weights
-    alpha = 1.0e-8
-    beta = 1.0e-5
-    gamma = 1.0e-6
+    alpha = 1.0e-7
+    beta = 1.0e-3
+    gamma = 1.0e-1
+    
     
     vertices, edges, original_json_object = pre_process_data(filename, True)
     cb = None# make_plot_callback(vertices, edges)#None #plot_and_save_vertices_edges
-    hof = run_cma(vertices, edges, alpha, beta, gamma, cb, lambda_=500)
+    hof = run_cma(vertices, edges, alpha, beta, gamma, cb, lambda_=2000, generations=1000)
     
     # Extract solution
     n_v = int(len(hof.items[0]) / 2)

@@ -93,8 +93,8 @@ def post_optimization_plotting(json_object, vertices, edges, new_vertices=None):
     
 
 def main():
-    filename = 'data/map_1.json'
-    vertices, edges, original_json_object = pre_process_data(filename, False)
+    filename = 'data/map_6_downtown.json'
+    vertices, edges, original_json_object = pre_process_data(filename, True)
     cb = None# make_plot_callback(vertices, edges)#None #plot_and_save_vertices_edges
     json_object = driver(filename, vertices=vertices, edges=edges,
                          cb=cb)
@@ -133,7 +133,7 @@ def driver(filename='data/map_1.json', vertices=None, edges=None, cb=None):
     # total guess at weights
     alpha = 1.0e-7
     beta = 1.0e-3
-    gamma = 1.0
+    gamma = 1.0e-1
     
     x, y, theta, xy, n_v, n_e, args = get_initial_arguments(vertices, edges, alpha, beta, gamma, cb)
 
@@ -183,7 +183,7 @@ def driver(filename='data/map_1.json', vertices=None, edges=None, cb=None):
     print('fitness functional term1 = ',sum(fitness1),', term2 = ',sum(fitness2),', term3 = ',sum(fitness3))
     print('fitness functional medians term1 = ',median(fitness1),', term2 = ',median(fitness2),', term3 = ',median(fitness3))
 
-
+    print('final fitness',fitness_function1(res.x), args)    
     # Put it into a dictionary
     vertices = []
     for xtilde_, ytilde_ in zip(xtilde, ytilde):

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.10.16)  5 JUL 2018 23:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.10.16)  6 JUL 2018 09:26
 entering extended mode
 **./IPSW_final.tex
 (IPSW_final.tex
@@ -1138,7 +1138,7 @@ Overfull \vbox (8.29112pt too high) detected at line 181
 File: ../pngs/map_6_powell.png Graphic file (type png)
 
 <use ../pngs/map_6_powell.png>
-Package pdftex.def Info: ../pngs/map_6_powell.png used on input line 266.
+Package pdftex.def Info: ../pngs/map_6_powell.png used on input line 273.
 (pdftex.def)             Requested size: 307.28987pt x 200.10225pt.
  [12
 
@@ -1147,12 +1147,63 @@ Package pdftex.def Info: ../pngs/map_6_powell.png used on input line 266.
 File: ../pngs/artist_stylization.png Graphic file (type png)
 
 <use ../pngs/artist_stylization.png>
-Package pdftex.def Info: ../pngs/artist_stylization.png used on input line 266.
+Package pdftex.def Info: ../pngs/artist_stylization.png used on input line 273.
 
 (pdftex.def)             Requested size: 307.28987pt x 172.84572pt.
  [13
 
  <../pngs/artist_stylization.png>]
+<../pngs/artist_stylization_overlaid.png, id=122, 1204.5pt x 677.53125pt>
+File: ../pngs/artist_stylization_overlaid.png Graphic file (type png)
+
+<use ../pngs/artist_stylization_overlaid.png>
+Package pdftex.def Info: ../pngs/artist_stylization_overlaid.png used on input 
+line 273.
+(pdftex.def)             Requested size: 307.28987pt x 172.84572pt.
+ [14
+
+ <../pngs/artist_stylization_overlaid.png>] <../pngs/map_6_cmaes.png, id=129, 3
+88.45125pt x 252.945pt>
+File: ../pngs/map_6_cmaes.png Graphic file (type png)
+
+<use ../pngs/map_6_cmaes.png>
+Package pdftex.def Info: ../pngs/map_6_cmaes.png used on input line 273.
+(pdftex.def)             Requested size: 307.28987pt x 200.10225pt.
+ [15
+
+ <../pngs/map_6_cmaes.png>] [16
+
+]
+<../pngs/map3_original.png, id=143, 675.0018pt x 510.2262pt>
+File: ../pngs/map3_original.png Graphic file (type png)
+
+<use ../pngs/map3_original.png>
+Package pdftex.def Info: ../pngs/map3_original.png used on input line 325.
+(pdftex.def)             Requested size: 157.04959pt x 118.71518pt.
+
+<../pngs/map3_constg.png, id=144, 1194.6231pt x 663.4386pt>
+File: ../pngs/map3_constg.png Graphic file (type png)
+
+<use ../pngs/map3_constg.png>
+Package pdftex.def Info: ../pngs/map3_constg.png used on input line 325.
+(pdftex.def)             Requested size: 199.73653pt x 110.9204pt.
+ [17
+
+ <../pngs/map3_original.png> <../pngs/map3_constg.png>]
+File: ../pngs/map3_original.png Graphic file (type png)
+ <use ../pngs/map3_original.png>
+Package pdftex.def Info: ../pngs/map3_original.png used on input line 340.
+(pdftex.def)             Requested size: 157.04959pt x 118.71518pt.
+
+<../pngs/map3spread.png, id=153, 1187.3961pt x 663.4386pt>
+File: ../pngs/map3spread.png Graphic file (type png)
+
+<use ../pngs/map3spread.png>
+Package pdftex.def Info: ../pngs/map3spread.png used on input line 340.
+(pdftex.def)             Requested size: 199.73653pt x 111.59865pt.
+ [18
+
+ <../pngs/map3spread.png>]
 \tf@nav=\write6
 \openout6 = `IPSW_final.nav'.
 
@@ -1162,20 +1213,19 @@ Package pdftex.def Info: ../pngs/artist_stylization.png used on input line 266.
 \tf@snm=\write8
 \openout8 = `IPSW_final.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 268.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 268.
-
-(IPSW_final.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 268.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 268.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 345.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 345.
+ (IPSW_final.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 345.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 345.
 Package rerunfilecheck Info: File `IPSW_final.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 29930 strings out of 493323
- 726063 string characters out of 3139065
+ 29971 strings out of 493323
+ 726921 string characters out of 3139065
  957973 words of memory out of 3000000
- 32852 multiletter control sequences out of 15000+200000
+ 32878 multiletter control sequences out of 15000+200000
  13279 words of font info for 48 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  64i,11n,98p,807b,609s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1193,9 +1243,9 @@ rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program F
 iles/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKT
 eX 2.9/fonts/type1/public/amsfonts/symbols/msam10.pfb><C:/Program Files/MiKTeX 
 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on IPSW_final.pdf (13 pages, 436708 bytes).
+Output written on IPSW_final.pdf (18 pages, 1011713 bytes).
 PDF statistics:
- 176 PDF objects out of 1000 (max. 8388607)
- 27 named destinations out of 1000 (max. 500000)
- 68 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 219 PDF objects out of 1000 (max. 8388607)
+ 37 named destinations out of 1000 (max. 500000)
+ 93 words of extra memory for PDF output out of 10000 (max. 10000000)
 
