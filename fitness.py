@@ -180,10 +180,10 @@ def driver(filename='data/map_1.json', vertices=None, edges=None, cb=None):
 
     print('Max deviation from multiple of pi/8 in original map is ',deviation(theta),' for optimized map is ',deviation(thetatilde))
 
-    print('fitness functional term1 = ',sum(fitness1),', term2 = ',sum(fitness2),', term3 = ',sum(fitness3))
-    print('fitness functional medians term1 = ',median(fitness1),', term2 = ',median(fitness2),', term3 = ',median(fitness3))
+    #print('fitness functional term1 = ',sum(fitness1),', term2 = ',sum(fitness2),', term3 = ',sum(fitness3))
+    #print('fitness functional medians term1 = ',median(fitness1),', term2 = ',median(fitness2),', term3 = ',median(fitness3))
 
-    print('final fitness',fitness_function1(res.x), args)    
+    #print('final fitness',fitness_function1(res.x), args)    
     # Put it into a dictionary
     vertices = []
     for xtilde_, ytilde_ in zip(xtilde, ytilde):
