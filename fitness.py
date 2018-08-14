@@ -66,7 +66,7 @@ def fitness_function1(xytilde,args):
 
     return fitness    
 
-def pre_process_data(filename='data/map_1.json', do_rotation=False):
+def pre_process_data(filename='data/map_1.json', do_rotation=True):
     clear_gif_staging()
     original_json_object = from_json_file(filename)
     vertices, edges = convert_vertices(original_json_object), convert_edges(original_json_object)
@@ -93,7 +93,7 @@ def post_optimization_plotting(json_object, vertices, edges, new_vertices=None):
     
 
 def main():
-    filename = 'data/map_6_downtown.json'
+    filename = 'data/map_2.json'
     vertices, edges, original_json_object = pre_process_data(filename, True)
     cb = None# make_plot_callback(vertices, edges)#None #plot_and_save_vertices_edges
     json_object = driver(filename, vertices=vertices, edges=edges,
@@ -131,9 +131,9 @@ def driver(filename='data/map_1.json', vertices=None, edges=None, cb=None):
         vertices, edges = get_vertices_edges(filename)
 
     # total guess at weights
-    alpha = 1.0e-7
-    beta = 1.0e-3
-    gamma = 1.0e-1
+    alpha = 1.0e-5
+    beta = 1.0e-1
+    gamma = 1.0
     
     x, y, theta, xy, n_v, n_e, args = get_initial_arguments(vertices, edges, alpha, beta, gamma, cb)
 
